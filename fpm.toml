@@ -1,0 +1,17 @@
+name = "AoC2023"
+version = "0.1.0"
+license = "GPLv3"
+author = "Andrew Lister"
+copyright = "Copyright 2023, Andrew Lister"
+[build]
+auto-executables = true
+auto-tests = true
+auto-examples = true
+module-naming = false
+[install]
+library = false
+[fortran]
+implicit-typing = false
+implicit-external = false
+source-form = "free"
+
