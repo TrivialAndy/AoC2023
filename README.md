@@ -7,7 +7,7 @@ A reminder for myself of how to run it is below!
 
 ## Repo structure
 
-- `app` has the main entry point for the code. This is a cli that takes the day, part, and the index of the dataset as 3 args. At some point it might start printing out timings too.
+- `app` has the main entry point for the code. This is a cli that takes the day, part, and the index of the dataset as 3 args. After running it will print out a runtime too.
 - `data` Nothing is commited to this but the code expects a folder called `data` with each days problem inputs in. e.g. `data/day01_0.txt`
 - `src` contains code specific to each day. If any of the code ends up being reusable it can be split out into modules that end up in this folder too.
 - `fpm.toml` the build file.
