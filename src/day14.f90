@@ -1,24 +1,25 @@
 module aoc2023__day14
-  implicit none
-  private
+   implicit none
+   private
 
-  public :: day14
+   public :: day14
 
 contains
 
-  !> Run the days solution for part <part> on the dataset numbered <dataset>
-  !> Prints the correct answer to the terminal
-  subroutine day14(part, dataset)
+   !> Run the days solution for part <part> on the dataset numbered <dataset>
+   !> Prints the correct answer to the terminal
+   subroutine day14(part, dataset)
+      integer, intent(in) :: part, dataset
+   end subroutine day14
 
-  end subroutine day14
+   !> Parse the input for this problem
+   subroutine parse(dataset)
+      integer, intent(in) :: dataset
+   end subroutine parse
 
-  !> Parse the input for this problem
-  subroutine parse(dataset)
+   !> Solve part 1
+   subroutine part1(input)
+      character(len=50), dimension(:), intent(in) :: input
 
-  end subroutine parse
-
-  !> Solve part 1
-  subroutine part1(input)
-
-  end subroutine part1
+   end subroutine part1
 end module aoc2023__day14
