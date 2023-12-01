@@ -1,4 +1,5 @@
 program main
+   use, intrinsic :: iso_fortran_env, only: real64
    use aoc2023__day01
    use aoc2023__day02
    use aoc2023__day03
@@ -26,8 +27,6 @@ program main
    use aoc2023__day25
    implicit none
 
-   !> Loop counter
-   integer :: i
    !> Number of cli arguments (expecting 3)
    integer :: num_args
    !> Temporary storage for cli args
@@ -35,6 +34,13 @@ program main
    !> The defining values for the problem to solve
    integer :: day, part, dataset
    ! Get input (day, part, dataset)
+
+   !> Time markers for start and end
+   real(kind=real64) :: start, finish
+
+   !> Loop counter
+   integer :: i
+   
    num_args = command_argument_count()
    if (num_args < 3) then
       print*, "Not enough args! What day, part, and dataset should we solve?"
@@ -49,6 +55,7 @@ program main
    read(args(2), *) part
    read(args(3), *) dataset
 
+   call cpu_time(start)
    select case(day)
     case (1)
       call day01(part, dataset)
@@ -103,5 +110,8 @@ program main
     case default
       print *, "Day not in advent! Are you solving problems from another date?!"
    end select
+   call cpu_time(finish)
+
+   print '(a, f0.4, a)', "Solved in ", finish - start, " seconds"
 
 end program main

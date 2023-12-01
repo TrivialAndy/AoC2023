@@ -45,7 +45,7 @@ contains
       integer :: total
 
       !> First and last integer values encountered
-      integer :: first, last, last_idx
+      integer :: first, last
 
       !> Loop counter
       integer :: i
@@ -55,91 +55,40 @@ contains
       stat = 0
       do
          read(input, *, iostat = stat) line
-         select case(stat)
-          case (0)
-            ! Continue execution
-          case (iostat_end)
-            exit
-          case default
+         if (stat /= 0) then
+            if (stat == iostat_end) exit
             print *, "Read error!"
             stop
-         end select
-
+         end if
          first = -1
          last = -1
-         last_idx = 1
          length = len_trim(line)
+
          do i=1,length
-            if (first < 0) then
-               read(line(i:i), '(i1)', iostat=stat) first
-               if (part == 2 .and. stat == 0) call first_digit(line(1:i-1), first)
+            read(line(i:i), '(i1)', iostat=stat) first
+            if (part == 2 .and. first < 0) then
+               if (length - i + 1 >= 5) call five_digit_number(line(i:i+4), first)
+               if (length - i + 1 >= 4) call four_digit_number(line(i:i+3), first)
+               if (length - i + 1 >= 3) call three_digit_number(line(i:i+2), first)
             end if
-            read(line(i:i), '(i1)', iostat=stat) last
-            if (part == 2 .and. stat == 0) last_idx = i
+            if (first >= 0) exit
          end do
-         if (part == 2) call last_digit(line(last_idx+1:length), last)
+
+         do i=length,1,-1
+            read(line(i:i), '(i1)', iostat=stat) last
+            if (part == 2 .and. last < 0) then
+               if (i >= 5) call five_digit_number(line(i-4:i), last)
+               if (i >= 4) call four_digit_number(line(i-3:i), last)
+               if (i >= 3) call three_digit_number(line(i-2:i), last)
+            end if
+            if (last >= 0) exit
+         end do
+
          total = total + 10*first + last
+
       end do
       print *, "Calibration value is: ", total
    end subroutine solve
-
-   !> Find the first digit written as text in a string
-   subroutine first_digit(line, output)
-      !> The line to scan for text
-      character(len=*), intent(in) :: line
-      !> The value to return if no string is found
-      integer, intent(inout) :: output
-      !> The first digit found
-      integer :: tmp
-
-      !> Length of line
-      integer :: length
-
-      !> Loop counter
-      integer :: i
-
-      length = len_trim(line)
-      tmp = -1
-
-      do i=1,(length-2)
-         if (length - i + 1 >= 5) call five_digit_number(line(i:i+4), tmp)
-         if (length - i + 1 >= 4) call four_digit_number(line(i:i+3), tmp)
-         if (length - i + 1 >= 3) call three_digit_number(line(i:i+2), tmp)
-         if (tmp >= 0) then
-            output = tmp
-            exit
-         end if
-      end do
-   end subroutine first_digit
-   
-   !> Find the last digit written as text in a string
-   subroutine last_digit(line, output)
-      !> The line to scan for text
-      character(len=*), intent(in) :: line
-      !> The value to return if no string is found
-      integer, intent(inout) :: output
-      !> The first digit found
-      integer :: tmp
-
-      !> Length of line
-      integer :: length
-
-      !> Loop counter
-      integer :: i
-
-      length = len_trim(line)
-      tmp = -1
-
-      do i=length,3,-1
-         if (i >= 5) call five_digit_number(line(i-4:i), tmp)
-         if (i >= 4) call four_digit_number(line(i-3:i), tmp)
-         if (i >= 3) call three_digit_number(line(i-2:i), tmp)
-         if (tmp >= 0) then
-            output = tmp
-            exit
-         end if
-      end do
-   end subroutine last_digit
 
    !> Parse a 5 digit number
    subroutine five_digit_number(line, output)
@@ -147,9 +96,14 @@ contains
       character(len=5), intent(in) :: line
       !> The output to set
       integer, intent(inout) :: output
-      if (line == "three") output = 3
-      if (line == "seven") output = 7
-      if (line == "eight") output = 8
+      select case (line)
+       case ("three")
+         output = 3
+       case ("seven")
+         output = 7
+       case ("eight")
+         output = 8
+      end select
    end subroutine five_digit_number
 
    !> Parse a 4 digit number
@@ -158,10 +112,16 @@ contains
       character(len=4), intent(in) :: line
       !> The output to set
       integer, intent(inout) :: output
-      if (line == "zero") output = 0
-      if (line == "four") output = 4
-      if (line == "five") output = 5
-      if (line == "nine") output = 9
+      select case (line)
+       case ("zero")
+         output = 0
+       case("four")
+         output = 4
+       case("five")
+         output = 5
+       case("nine")
+         output = 9
+      end select
    end subroutine four_digit_number
 
    !> Parse a 3 digit number
@@ -170,9 +130,14 @@ contains
       character(len=3), intent(in) :: line
       !> The output to set
       integer, intent(inout) :: output
-      if (line == "one") output = 1
-      if (line == "two") output = 2
-      if (line == "six") output = 6
+      select case (line)
+       case ("one")
+         output = 1
+       case ("two")
+         output = 2
+       case ("six")
+         output = 6
+      end select
    end subroutine three_digit_number
 
 
