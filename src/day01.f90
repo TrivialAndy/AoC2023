@@ -20,11 +20,7 @@ contains
       write (filename, '(a,i0,a)') "data/day01_", dataset, ".txt"
       open(newunit=fileunit, file=filename)
 
-      if (part < 3 .and. part > 0) then
-         call solve(fileunit, part)
-      else
-         print*, "Hold up, we're out of parts'!"
-      end if
+      call solve(fileunit, part)
    end subroutine day01
 
    !> Solve

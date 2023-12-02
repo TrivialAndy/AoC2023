@@ -40,7 +40,7 @@ program main
 
    !> Loop counter
    integer :: i
-   
+
    num_args = command_argument_count()
    if (num_args < 3) then
       print*, "Not enough args! What day, part, and dataset should we solve?"
@@ -54,6 +54,11 @@ program main
    read(args(1), *) day
    read(args(2), *) part
    read(args(3), *) dataset
+
+   if (part < 1 .or. part > 2) then
+      print*, "Hold up, AoC days only have 2 parts!"
+      stop
+   end if
 
    call cpu_time(start)
    select case(day)
