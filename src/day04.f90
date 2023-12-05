@@ -7,24 +7,8 @@ module aoc2023__day04
 
 contains
 
-   !> Run the days solution for part <part> on the dataset numbered <dataset>
-   !> Prints the correct answer to the terminal
-   subroutine day04(part, dataset)
-      !> The problem to solve
-      integer, intent(in) :: part, dataset
-      !> Unit for the input dataset
-      integer :: fileunit
-      !> The filename for the inpput dataset
-      character(len=50) :: filename
-
-      write (filename, '(a,i0,a)') "data/day04_", dataset, ".txt"
-      open(newunit=fileunit, file=filename)
-
-      call solve(fileunit, part)
-   end subroutine day04
-
    !> Solve the problem
-   subroutine solve(input, part)
+   subroutine day04(input, part)
       !> THe unit to read input from
       integer, intent(in) :: input
       !> Which part are we solving?
@@ -115,5 +99,5 @@ contains
       if (stat /= iostat_end) print*, "uh oh... file read error"
 
       print *, "This elf got ", tot_score, " points!"
-   end subroutine solve
+   end subroutine day04
 end module aoc2023__day04

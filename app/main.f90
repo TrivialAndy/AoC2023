@@ -33,7 +33,11 @@ program main
    character(len=20), dimension(:), allocatable :: args
    !> The defining values for the problem to solve
    integer :: day, part, dataset
-   ! Get input (day, part, dataset)
+
+   !> Unit for the input dataset
+   integer :: fileunit
+   !> The filename for the inpput dataset
+   character(len=50) :: filename
 
    !> Time markers for start and end
    real(kind=real64) :: start, finish
@@ -60,62 +64,69 @@ program main
       stop
    end if
 
+
+   write (filename, '(a,i2.2,a,i0,a)') "data/day", day, "_", dataset, ".txt"
+   print '(a, i0, a, i0, a, a)', "Solving problem ", day, ".", part, " for input: ", filename
+   open(newunit=fileunit, file=filename)
+
    call cpu_time(start)
    select case(day)
     case (1)
-      call day01(part, dataset)
+      call day01(fileunit, part)
     case (2)
-      call day02(part, dataset)
+      call day02(fileunit, part)
     case (3)
-      call day03(part, dataset)
+      call day03(fileunit, part)
     case (4)
-      call day04(part, dataset)
+      call day04(fileunit, part)
     case (5)
-      call day05(part, dataset)
+      call day05(fileunit, part)
     case (6)
-      call day06(part, dataset)
+      call day06(fileunit, part)
     case (7)
-      call day07(part, dataset)
+      call day07(fileunit, part)
     case (8)
-      call day08(part, dataset)
+      call day08(fileunit, part)
     case (9)
-      call day09(part, dataset)
+      call day09(fileunit, part)
     case (10)
-      call day10(part, dataset)
+      call day10(fileunit, part)
     case (11)
-      call day11(part, dataset)
+      call day11(fileunit, part)
     case (12)
-      call day12(part, dataset)
+      call day12(fileunit, part)
     case (13)
-      call day13(part, dataset)
+      call day13(fileunit, part)
     case (14)
-      call day14(part, dataset)
+      call day14(fileunit, part)
     case (15)
-      call day15(part, dataset)
+      call day15(fileunit, part)
     case (16)
-      call day16(part, dataset)
+      call day16(fileunit, part)
     case (17)
-      call day17(part, dataset)
+      call day17(fileunit, part)
     case (18)
-      call day18(part, dataset)
+      call day18(fileunit, part)
     case (19)
-      call day19(part, dataset)
+      call day19(fileunit, part)
     case (20)
-      call day20(part, dataset)
+      call day20(fileunit, part)
     case (21)
-      call day21(part, dataset)
+      call day21(fileunit, part)
     case (22)
-      call day22(part, dataset)
+      call day22(fileunit, part)
     case (23)
-      call day23(part, dataset)
+      call day23(fileunit, part)
     case (24)
-      call day24(part, dataset)
+      call day24(fileunit, part)
     case (25)
-      call day25(part, dataset)
+      call day25(fileunit, part)
     case default
       print *, "Day not in advent! Are you solving problems from another date?!"
    end select
    call cpu_time(finish)
+
+   close(fileunit)
 
    print '(a, f0.4, a)', "Solved in ", finish - start, " seconds"
 

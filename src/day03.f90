@@ -7,24 +7,8 @@ module aoc2023__day03
 
 contains
 
-   !> Run the days solution for part <part> on the dataset numbered <dataset>
-   !> Prints the correct answer to the terminal
-   subroutine day03(part, dataset)
-      !> The problem to solve
-      integer, intent(in) :: part, dataset
-      !> Unit for the input dataset
-      integer :: fileunit
-      !> The filename for the inpput dataset
-      character(len=50) :: filename
-
-      write (filename, '(a,i0,a)') "data/day03_", dataset, ".txt"
-      open(newunit=fileunit, file=filename)
-
-      call solve(fileunit, part)
-   end subroutine day03
-
    !> Solve the problem!
-   subroutine solve(input, part)
+   subroutine day03(input, part)
       !> Open unit for reading the input
       integer, intent(in) :: input
       !> Which part are we solving?!
@@ -100,7 +84,7 @@ contains
 
       print *, "The parts add up to ", total
 
-   end subroutine solve
+   end subroutine day03
 
    !> Update the working values for part 2. Set values to -2 if not possible
    subroutine update_working(line, idx, working, working2, updated)

@@ -7,24 +7,8 @@ module aoc2023__day02
 
 contains
 
-   !> Run the days solution for part <part> on the dataset numbered <dataset>
-   !> Prints the correct answer to the terminal
-   subroutine day02(part, dataset)
-      !> The problem to solve
-      integer, intent(in) :: part, dataset
-      !> Unit for the input dataset
-      integer :: fileunit
-      !> The filename for the inpput dataset
-      character(len=50) :: filename
-
-      write (filename, '(a,i0,a)') "data/day02_", dataset, ".txt"
-      open(newunit=fileunit, file=filename)
-
-      call solve(fileunit, part)
-   end subroutine day02
-
    !> Solve the problem
-   subroutine solve(input, part)
+   subroutine day02(input, part)
       !> Open file unit for the input
       integer, intent(in) :: input
       !> Which part are we solving?
@@ -98,7 +82,7 @@ contains
       print*, "They cheated! Max score was ", soln
 
 
-   end subroutine solve
+   end subroutine day02
 
    !> Get the minimum number of cubes for the game
    function min_possible(round) result(revealed)

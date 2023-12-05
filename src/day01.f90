@@ -7,24 +7,8 @@ module aoc2023__day01
 
 contains
 
-   !> Run the days solution for part <part> on the dataset numbered <dataset>
-   !> Prints the correct answer to the terminal
-   subroutine day01(part, dataset)
-      !> The problem to solve
-      integer, intent(in) :: part, dataset
-      !> Unit for the input dataset
-      integer :: fileunit
-      !> The filename for the inpput dataset
-      character(len=50) :: filename
-
-      write (filename, '(a,i0,a)') "data/day01_", dataset, ".txt"
-      open(newunit=fileunit, file=filename)
-
-      call solve(fileunit, part)
-   end subroutine day01
-
    !> Solve
-   subroutine solve(input, part)
+   subroutine day01(input, part)
       !> Input open file unit
       integer, intent(in) :: input
       !> Which part are we solving
@@ -84,7 +68,7 @@ contains
 
       end do
       print *, "Calibration value is: ", total
-   end subroutine solve
+   end subroutine day01
 
    !> Parse a 5 digit number
    subroutine five_digit_number(line, output)
