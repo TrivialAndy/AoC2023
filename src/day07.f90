@@ -1,5 +1,6 @@
 module aoc2023__day07
    use, intrinsic :: iso_fortran_env, only: iostat_end
+   use stdlib_sorting, only: sort_index, int_size
    implicit none
    private
 
@@ -15,13 +16,11 @@ contains
       integer, intent(in) :: part
 
       !> The hands to compare (and temp array for resizing)
-      character(len=5), allocatable, dimension(:) :: hands, tmp_hands
+      character(len=6), allocatable, dimension(:) :: hands, tmp_hands
       !> The bids for each hand (and temp array for resizing)
       integer, allocatable, dimension(:) :: bids, tmp_bids
-      !> The type of the hands (and temp array for resizing)
-      integer, allocatable, dimension(:) :: types, tmp_types
       !> The number of hands each hand beats
-      integer, allocatable, dimension(:) :: scores
+      integer(kind=int_size), allocatable, dimension(:) :: scores
       !> The number of hands to compare
       integer :: count
 
@@ -34,60 +33,39 @@ contains
       integer :: stat
 
       count = 1
-      allocate(hands(8), bids(8), types(8))
+      allocate(hands(8), bids(8))
 
       do
          if (size(hands) == count) then
-            allocate(tmp_hands(count*2), tmp_bids(count*2), tmp_types(count*2))
+            allocate(tmp_hands(count*2), tmp_bids(count*2))
             tmp_hands(1:count) = hands
             tmp_bids(1:count) = bids
-            tmp_types(1:count) = types
             call move_alloc(tmp_hands, hands)
             call move_alloc(tmp_bids, bids)
-            call move_alloc(tmp_types, types)
          end if
-         read(input, *, iostat=stat) hands(count), bids(count)
+         read(input, *, iostat=stat) hands(count)(2:6), bids(count)
          if (stat /= 0) then
             if (stat == iostat_end) exit
             print*, "Ooops file read error!"
             stop
          end if
-         types(count) = hand_type(hands(count), part)
+         call rewrite_hand(hands(count), part)
          count = count + 1
       end do
 
       count = count - 1
 
       allocate(scores(count))
-      scores = 1
+
+      call sort_index(hands(1:count), scores)
+
       score = 0
+      bids(1:count) = bids(scores)
       do i=1,count
-         do j=i,count
-            if (types(i) > types(j)) then
-               scores(i) = scores(i) + 1
-            elseif (types(i) < types(j)) then
-               scores(j) = scores(j) + 1
-            else
-               do k=1,5
-                  if (card_value(hands(i)(k:k), part) > card_value(hands(j)(k:k), part)) then
-                     scores(i) = scores(i) + 1
-                     exit
-                  elseif (card_value(hands(i)(k:k), part) < card_value(hands(j)(k:k), part)) then
-                     scores(j) = scores(j) + 1
-                     exit
-                  end if
-               end do
-            end if
-         end do
-         score = score + scores(i) * bids(i)
+         score = score + i * bids(i)
       end do
 
       print '(a,i0)', "Final score... ", score
-      ! print '(a,*(a6))', "hands:  ", hands
-      ! print '(a,*(i6))', "bids:   ", bids
-      ! print '(a,*(i6))', "types:  ", types
-      ! print '(a,*(i6))', "Scores: ", scores
-
    end subroutine day07
 
    !> Get the type of the hand:
@@ -98,9 +76,9 @@ contains
    !> Full house = 5
    !> Four of a kind = 6
    !> Five of a kind = 7
-   function hand_type(hand, part) result(type)
+   subroutine rewrite_hand(hand, part)
       !> The hand to test
-      character(len=5), intent(in) :: hand
+      character(len=6), intent(inout) :: hand
       !> Which part are we solving
       integer, intent(in) :: part
       !> The type of the hand
@@ -117,9 +95,10 @@ contains
       integer :: val
 
       cards = 0
-      do i=1,5
+      do i=2,6
          val = card_value(hand(i:i), part)
          cards(val) = cards(val) + 1
+         hand(i:i) = char(64+val)
       end do
 
       best = 1
@@ -141,25 +120,25 @@ contains
       if (best(1) > 5) best(1) = 5
       select case(best(1))
        case(1)
-         type = 1
+         hand(1:1) = "1"
        case(2)
          if (best(2) == 1) then
-            type = 2
+            hand(1:1) = "2"
          else
-            type = 3
+            hand(1:1) = "3"
          end if
        case(3)
          if (best(2) == 1) then
-            type = 4
+            hand(1:1) = "4"
          else
-            type = 5
+            hand(1:1) = "5"
          end if
        case(4)
-         type = 6
+         hand(1:1) = "6"
        case(5)
-         type = 7
+         hand(1:1) = "7"
       end select
-   end function hand_type
+   end subroutine rewrite_hand
 
    !> Convert a card character to a value
    function card_value(card, part) result(val)
