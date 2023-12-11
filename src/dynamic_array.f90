@@ -1,5 +1,5 @@
 module dynamic_array
-   use, intrinsic :: iso_fortran_env, only: int64
+   use, intrinsic :: iso_fortran_env, only: int32, int64
    implicit none
    private
    public :: grow, shrink
@@ -29,9 +29,11 @@ contains
    !> Double the size of an allocatable array
    subroutine grow_integer(arr)
       !> The array to grow
-      integer, allocatable, dimension(:), intent(inout) :: arr
+      integer(kind=int32), allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
-      integer, allocatable, dimension(:) :: tmp
+      integer(kind=int32), allocatable, dimension(:) :: tmp
+
       !> The size of the array
       integer :: length
 
@@ -44,12 +46,14 @@ contains
 
    !> Double the size of a 2d allocatable array
    subroutine grow_2d_integer(arr, dim)
+      !> The array to grow
+      integer(kind=int32), allocatable, dimension(:,:), intent(inout) :: arr
       !> The dimension to grow along
       integer, intent(in) :: dim
-      !> The array to grow
-      integer, allocatable, dimension(:,:), intent(inout) :: arr
+
       !> A temp array
-      integer, allocatable, dimension(:,:) :: tmp
+      integer(kind=int32), allocatable, dimension(:,:) :: tmp
+
       !> The size of the array
       integer, dimension(2) :: length
 
@@ -64,12 +68,13 @@ contains
 
    !> Reduce an allocatable array to the given size
    subroutine shrink_integer(arr, length)
+      !> The array to grow
+      integer(kind=int32), allocatable, dimension(:), intent(inout) :: arr
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to shrink
-      integer, allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
-      integer, allocatable, dimension(:) :: tmp
+      integer(kind=int32), allocatable, dimension(:) :: tmp
 
       allocate(tmp(length))
       tmp(1:length) = arr(1:length)
@@ -80,14 +85,15 @@ contains
    
    !> Double the size of a 2d allocatable array
    subroutine shrink_2d_integer(arr, dim, length)
+      !> The array to grow
+      integer(kind=int32), allocatable, dimension(:,:), intent(inout) :: arr
       !> The dimension to grow along
       integer, intent(in) :: dim
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to grow
-      integer, allocatable, dimension(:,:), intent(inout) :: arr
+
       !> A temp array
-      integer, allocatable, dimension(:,:) :: tmp
+      integer(kind=int32), allocatable, dimension(:,:) :: tmp
       !> The size of the array
       integer, dimension(2) :: arr_shape
 
@@ -103,9 +109,11 @@ contains
    !> Double the size of an allocatable array
    subroutine grow_integer64(arr)
       !> The array to grow
-      integer(int64), allocatable, dimension(:), intent(inout) :: arr
+      integer(kind=int64), allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
-      integer(int64), allocatable, dimension(:) :: tmp
+      integer(kind=int64), allocatable, dimension(:) :: tmp
+
       !> The size of the array
       integer :: length
 
@@ -118,12 +126,14 @@ contains
 
    !> Double the size of a 2d allocatable array
    subroutine grow_2d_integer64(arr, dim)
+      !> The array to grow
+      integer(kind=int64), allocatable, dimension(:,:), intent(inout) :: arr
       !> The dimension to grow along
       integer, intent(in) :: dim
-      !> The array to grow
-      integer(int64), allocatable, dimension(:,:), intent(inout) :: arr
+
       !> A temp array
-      integer(int64), allocatable, dimension(:,:) :: tmp
+      integer(kind=int64), allocatable, dimension(:,:) :: tmp
+
       !> The size of the array
       integer, dimension(2) :: length
 
@@ -138,12 +148,13 @@ contains
 
    !> Reduce an allocatable array to the given size
    subroutine shrink_integer64(arr, length)
+      !> The array to grow
+      integer(kind=int64), allocatable, dimension(:), intent(inout) :: arr
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to grow
-      integer(int64), allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
-      integer(int64), allocatable, dimension(:) :: tmp
+      integer(kind=int64), allocatable, dimension(:) :: tmp
 
       allocate(tmp(length))
       tmp(1:length) = arr(1:length)
@@ -154,14 +165,15 @@ contains
    
    !> Double the size of a 2d allocatable array
    subroutine shrink_2d_integer64(arr, dim, length)
+      !> The array to grow
+      integer(kind=int64), allocatable, dimension(:,:), intent(inout) :: arr
       !> The dimension to grow along
       integer, intent(in) :: dim
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to grow
-      integer(int64), allocatable, dimension(:,:), intent(inout) :: arr
+
       !> A temp array
-      integer(int64), allocatable, dimension(:,:) :: tmp
+      integer(kind=int64), allocatable, dimension(:,:) :: tmp
       !> The size of the array
       integer, dimension(2) :: arr_shape
 
@@ -178,8 +190,10 @@ contains
    subroutine grow_logical(arr)
       !> The array to grow
       logical, allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
       logical, allocatable, dimension(:) :: tmp
+
       !> The size of the array
       integer :: length
 
@@ -192,12 +206,14 @@ contains
 
    !> Double the size of a 2d allocatable array
    subroutine grow_2d_logical(arr, dim)
-      !> The dimension to grow along
-      integer, intent(in) :: dim
       !> The array to grow
       logical, allocatable, dimension(:,:), intent(inout) :: arr
+      !> The dimension to grow along
+      integer, intent(in) :: dim
+
       !> A temp array
       logical, allocatable, dimension(:,:) :: tmp
+
       !> The size of the array
       integer, dimension(2) :: length
 
@@ -212,10 +228,11 @@ contains
 
    !> Reduce an allocatable array to the given size
    subroutine shrink_logical(arr, length)
+      !> The array to grow
+      logical, allocatable, dimension(:), intent(inout) :: arr
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to shrink
-      logical, allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
       logical, allocatable, dimension(:) :: tmp
 
@@ -228,12 +245,13 @@ contains
    
    !> Double the size of a 2d allocatable array
    subroutine shrink_2d_logical(arr, dim, length)
+      !> The array to grow
+      logical, allocatable, dimension(:,:), intent(inout) :: arr
       !> The dimension to grow along
       integer, intent(in) :: dim
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to grow
-      logical, allocatable, dimension(:,:), intent(inout) :: arr
+
       !> A temp array
       logical, allocatable, dimension(:,:) :: tmp
       !> The size of the array
@@ -252,8 +270,10 @@ contains
    subroutine grow_character(arr)
       !> The array to grow
       character(len=*), allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
       character(len=len(arr(1))), allocatable, dimension(:) :: tmp
+
       !> The size of the array
       integer :: length
 
@@ -266,12 +286,14 @@ contains
 
    !> Double the size of a 2d allocatable array
    subroutine grow_2d_character(arr, dim)
-      !> The dimension to grow along
-      integer, intent(in) :: dim
       !> The array to grow
       character(len=*), allocatable, dimension(:,:), intent(inout) :: arr
+      !> The dimension to grow along
+      integer, intent(in) :: dim
+
       !> A temp array
       character(len=len(arr(1,1))), allocatable, dimension(:,:) :: tmp
+
       !> The size of the array
       integer, dimension(2) :: length
 
@@ -286,10 +308,11 @@ contains
 
    !> Reduce an allocatable array to the given size
    subroutine shrink_character(arr, length)
+      !> The array to grow
+      character(len=*), allocatable, dimension(:), intent(inout) :: arr
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to shrink
-      character(len=*), allocatable, dimension(:), intent(inout) :: arr
+
       !> A temp array
       character(len=len(arr(1))), allocatable, dimension(:) :: tmp
 
@@ -302,12 +325,13 @@ contains
    
    !> Double the size of a 2d allocatable array
    subroutine shrink_2d_character(arr, dim, length)
+      !> The array to grow
+      character(len=*), allocatable, dimension(:,:), intent(inout) :: arr
       !> The dimension to grow along
       integer, intent(in) :: dim
       !> The size of the array
       integer, intent(in) :: length
-      !> The array to grow
-      character(len=*), allocatable, dimension(:,:), intent(inout) :: arr
+
       !> A temp array
       character(len=len(arr(1,1))), allocatable, dimension(:,:) :: tmp
       !> The size of the array
