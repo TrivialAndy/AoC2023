@@ -127,15 +127,6 @@ contains
          return
       end if
 
-      do i=1,size(lru_cache)
-         if (size(lru_cache(i)%broken) == size(broken) .and. lru_cache(i)%map == map) then
-            if (all(lru_cache(i)%broken == broken)) then
-               count = lru_cache(i)%total
-               return
-            end if
-         end if
-      end do
-
       count = 0
       select case(map(1:1))
        case ("#")
@@ -156,7 +147,7 @@ contains
          count = count_possible(map(broken(1)+2:len(map)), broken(2:size(broken)), lru_cache, lru_index)
        case (".")
          i = 1
-         do 
+         do
             if (i > len(map)) exit
             if (map(i:i) /= ".") exit
             i = i + 1
@@ -164,29 +155,35 @@ contains
 
          count = count_possible(map(i:len(map)), broken, lru_cache, lru_index)
        case("?")
-         count = count_possible(map(2:len(map)), broken, lru_cache, lru_index)
-         do i=1,broken(1)
-            if (map(i:i) == ".") then
-               ! print '(a, i0)', "Not enough space for #'s. . at pos ", i
-               return
+         do i=1,size(lru_cache)
+            if (size(lru_cache(i)%broken) == size(broken) .and. lru_cache(i)%map == map) then
+               if (all(lru_cache(i)%broken == broken)) then
+                  count = lru_cache(i)%total
+                  return
+               end if
             end if
          end do
-         i = broken(1)+1
-         if (size(broken) > 1) then
-            if (map(i:i) == "#") then
-               return
-            else
-               i = i + 1
+         count = count_possible(map(2:len(map)), broken, lru_cache, lru_index)
+         i = index(map(1:broken(1)), ".")
+         if (i < 1) then
+            i = broken(1)+1
+            if (size(broken) > 1) then
+               if (map(i:i) == "#") then
+                  i = -1
+               else
+                  i = i + 1
+               end if
+            end if
+            if (i > 0) then
+               count = count + count_possible(map(i:len(map)), broken(2:size(broken)), lru_cache, lru_index)
             end if
          end if
-         count = count + count_possible(map(i:len(map)), broken(2:size(broken)), lru_cache, lru_index)
+         lru_cache(lru_index)%map = map
+         lru_cache(lru_index)%broken = broken
+         lru_cache(lru_index)%total = count
+         lru_index = mod(lru_index, size(lru_cache)) + 1
       end select
       ! print*, "Count: Output = ", count
-
-      lru_cache(lru_index)%map = map
-      lru_cache(lru_index)%broken = broken
-      lru_cache(lru_index)%total = count
-      lru_index = mod(lru_index, size(lru_cache)) + 1
 
    end function count_possible
 
